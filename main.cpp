@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector> 
+#include <algorithm>
 
 void compare(double a, double b) {
     // First: determine and print the smaller and larger of each number. 
@@ -39,6 +40,7 @@ int main(int argc, char *argv[]) {
     int count = 0; 
     std::string value_s; 
     std::string unit; 
+    std::vector<double> all_values; 
 
     while (true) {
         std::cout << "Enter a [value] [unit]: ";
@@ -65,6 +67,9 @@ int main(int argc, char *argv[]) {
                 std::cin.ignore(32767, '\n'); // clear remainder of the input buffer
                 continue;
         }
+
+        // store the converted value into a vector
+        all_values.push_back(conv_val); 
 
         // populate smallest and largest on first run
         if (first_run) {
@@ -95,5 +100,11 @@ int main(int argc, char *argv[]) {
     std::cout << "Largest value: " << largest << "\n"; 
     std::cout << "Count of values: " << count << "\n";
     std::cout << "Sum of values: " << sum << "\n"; 
+    
+    // sort all_values and then print them
+    std::ranges::sort(all_values); 
+    for (double v : all_values) {
+        std::cout << v << '\n';
+    }
     return 0; 
 } // end main()
