@@ -29,34 +29,71 @@ void compare(double a, double b) {
 
 int main(int argc, char *argv[]) {
     
-    double smallest = 0; 
-    double largest = 0; 
-
-    std::string input; 
+    double smallest = 0; // overwritten on first loop
+    double largest = 0;  // overwritten on first loop
     bool first_run = true; 
-    double a;
-    double b;  
-    while (std::cin >> input && input != "|") {
-        double d = std::stod(input); 
-        std::cout << "Input: " << d << "\n"; 
+    double value;
+    double conv_val; 
+    double conv_val_prev;
+    double sum = 0; 
+    int count = 0; 
+    std::string value_s; 
+    std::string unit; 
+
+    while (true) {
+        std::cout << "Enter a [value] [unit]: ";
+        std::cin >> value_s >> unit;
+       
+        if (value_s == "|") {
+            break; 
+        } else {
+            value = std::stod(value_s); // convert the user value input into a double
+        }
         
+        // convert the value to a raw value using m
+        if (unit == "m") {
+            conv_val = value; 
+        } else if (unit == "in") {
+            conv_val = value * 0.0254;
+        } else if (unit == "ft") {
+            conv_val = value * 0.3048; 
+        } else if (unit == "cm") {
+            conv_val = value * 0.01; 
+        } else {
+            std::cout << "Invalid unit: expected m, in, ft, cm." 
+                << "\n";
+                std::cin.ignore(32767, '\n'); // clear remainder of the input buffer
+                continue;
+        }
+
         // populate smallest and largest on first run
         if (first_run) {
-            smallest = d;
-            largest = d;             
+            smallest = conv_val;
+            largest = conv_val;             
         }
 
         // Set the smallest and largest values: 
-        if (d < smallest || first_run == true) {
+        if (conv_val < smallest || first_run == true) {
             std::cout << "the smallest so far.\n";
-            smallest = d; 
+            smallest = conv_val; 
+        }
+    
+        if (conv_val > largest || first_run == true) {
+            std::cout << "the largest so far.\n";
+            largest = conv_val; 
         }
         
-        if (d > largest || first_run == true) {
-            std::cout << "the largest so far.\n";
-            largest = d; 
+        if (!first_run) {
+            compare(conv_val, conv_val_prev);
         }
+        conv_val_prev = conv_val; 
+        count++;
+        sum += conv_val; 
         first_run = false; 
     }
+    std::cout << "Smallest value: " << smallest << "\n";
+    std::cout << "Largest value: " << largest << "\n"; 
+    std::cout << "Count of values: " << count << "\n";
+    std::cout << "Sum of values: " << sum << "\n"; 
     return 0; 
 } // end main()
