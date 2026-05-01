@@ -1,3 +1,0 @@
-/Users/jonasmoody/cpp_projects/playground/build/CMakeFiles/playground.dir
-/Users/jonasmoody/cpp_projects/playground/build/CMakeFiles/edit_cache.dir
-/Users/jonasmoody/cpp_projects/playground/build/CMakeFiles/rebuild_cache.dir
