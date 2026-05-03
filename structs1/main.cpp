@@ -1,60 +1,50 @@
-#include <cstddef>    // size_t
-#include <stdexcept>  // std::out_of_range
+#include <iostream> 
+#include "dynamic_array.h"
 
-template <typename T>
-class DynamicArray {
-private:
-    T* data_;
-    size_t size_;
-    size_t capacity_;
+int main() {
+    // 1. Construction
+    DynamicArray<int> a;
+    // push some values into a
+    a.push_back(1); 
+    a.push_back(2); 
+    a.push_back(3); 
+    std::cout << a[0] << ',' << a[1] << ',' << a[2] << '\n';
+    std::cout << "Size: " << a.size() << '\n'; 
 
-    void resize() {
-        capacity_ *= 2; 
-        T* new_data = new T[capacity_];
+    // 2. Copy construction
+    // create b as a copy of a
+    DynamicArray<int> b(a); 
+    std::cout << b[0] << ',' << b[1] << ',' << b[2] << '\n';
+    std::cout << "Size: " << b.size() << '\n'; 
 
-        for (size_t i = 0; i < size_; i++) {
-            new_data[i] = data_[i];
-        }
+    // 3. Copy assignment
+    // create c, then assign a to it
+    DynamicArray<int> c;
+    c = a;  
+    std::cout << c[0] << ',' << c[1] << ',' << c[2] << '\n';
+    std::cout << "Size: " << c.size() << '\n'; 
 
-        delete[] data_;
-        data_ = new_data;
-    }
+    // 4. Move construction
+    // create d by moving from a temporary of std::move
+    DynamicArray<int> d = std::move(a); 
+    std::cout << d[0] << ',' << d[1] << ',' << d[2] << '\n';
+    std::cout << "Size: " << d.size() << '\n'; 
 
-public:
-    // Constructor
-    explicit DynamicArray(size_t initial_capacity = 2)
-        : size_(0), capacity_(initial_capacity)
-    {
-        data_ = new T[capacity_];
-    }
+    // 5. Move assignment
+    // create e, then move-assign into it
+    DynamicArray<int> e; 
+    e = std::move(b); 
 
-    // Destructor
-    ~DynamicArray() {
-        delete[] data_;
-    }
-
-    DynamicArray(const DynamicArray& other) 
-        : size_(other.size_), capacity_(other.capacity_)
-    {
-        data_ = new T[capacity_];
-        for (size_t i = 0; i < size_; i++) {
-            data[i] = other.data_[i];
-        }
-        return *this; 
-    }
-
-    void push_back(const T& value) {
-        if (size_ == capacity_) resize();
-        data_[size_++] = value;         
-    }
-
-    T& operator[](size_t index) { return data_[index]; }
-
-    T& at(size_t index) {
-        if (index >= size_) throw std::out_of_range("Index out of range");
-        return data_[index]; 
-    }
-
-    size_t size()      const { return size_; }
-    size_t capacity()  const { return capacity_; }
-};    // end class DynamicArray
+    // Verification
+    // print sizes and values to confirm correct behavior
+    std::cout << "a Size: " << a.size() << '\n'; 
+    std::cout << "b Size: " << b.size() << '\n'; 
+    std::cout << "c Size: " << c.size() << '\n'; 
+    std::cout << c[0] << ',' << c[1] << ',' << c[2] << '\n';
+    std::cout << "d Size: " << d.size() << '\n'; 
+    std::cout << d[0] << ',' << d[1] << ',' << d[2] << '\n';
+    std::cout << "e Size: " << e.size() << '\n'; 
+    std::cout << e[0] << ',' << e[1] << ',' << e[2] << '\n';
+    
+    return 0; 
+}
